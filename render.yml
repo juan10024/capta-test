@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: working-days-api
+    env: node
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    envVars:
+      - key: MONGO_URI
+        fromDatabase:
+          name: working-days-db
+          property: connectionString
+      - key: HOLIDAY_CACHE_TTL_SECONDS
+        value: 86400 # 24 hours
+      - key: HOLIDAY_API_URL
+        value: "https://content.capta.co/Recruitment/WorkingDays.json"
+
+databases:
+  - name: working-days-db
+    databaseName: working_days
+    ipAllowList: [] # Allow access from anywhere
+    plan: free

@@ -1,0 +1,31 @@
+services:
+  app:
+    container_name: working_days_api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app           
+      - /usr/src/app/node_modules 
+    command: 
+      npm run dev
+
+  mongo:
+    container_name: mongo
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    env_file:
+      - .env
+
+
+volumes:
+  mongodb_data:

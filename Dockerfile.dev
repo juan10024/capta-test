@@ -1,0 +1,13 @@
+# /Dockerfile.dev
+FROM node:18-alpine
+WORKDIR /usr/src/app
+
+# Instala dependencias con devDeps
+COPY package*.json ./
+RUN npm install
+
+# Instala herramientas globales opcionales si necesitas
+RUN npm install -g ts-node-dev
+
+EXPOSE 4000
+CMD ["npm", "run", "dev"]
