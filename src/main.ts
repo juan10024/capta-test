@@ -1,21 +1,42 @@
-import express, { Express, Request, Response } from "express";
-import cors from 'cors'; 
+// /src/main.ts
+import express, { Express } from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import 'dotenv/config';
+import { connectDB } from './infrastructure/database/mongo';
+import { calendarRouter } from './interfaces/routes/calendar.routes';
+import { errorHandler } from './interfaces/middleware/error.handler';
+import { config } from './shared/config'; 
 
-const app: Express = express()
+/**
+ * The main entry point for the application.
+ * It sets up the Express server, connects to the database, and defines routes.
+ */
+const app: Express = express();
 
-const PORT = process.env.PORT
+// --- Middleware ---
+app.use(helmet());              // Security headers
+app.use(cors());                // Cross-Origin Resource Sharing
+app.use(express.json());        // Body parser for JSON
 
-app.use(cors())
-app.use(express.json())
+// --- Routes ---
+app.use('/api/v1', calendarRouter);
 
-app.get('/', (req: Request , res: Response) => {
-    res.send("Bienvenido Pato!")
-}) 
+// --- Error Handling ---
+app.use(errorHandler);
 
-app.listen(PORT, () => {
-    console.log(`[server]: Server is running at http://localhost:${PORT}`)
-})
+// --- Server Startup ---
+const startServer = async (): Promise<void> => {
+  try {
+    await connectDB(config.mongo.uri);
+    console.log('MongoDB connected successfully.');
+    app.listen(config.port, () => {
+      console.log(`Server is running on http://localhost:${config.port}`);
+    });
+  } catch (error) {
+    console.error('Failed to start the server:', error);
+    process.exit(1);
+  }
+};
 
-
-
-
+startServer();
