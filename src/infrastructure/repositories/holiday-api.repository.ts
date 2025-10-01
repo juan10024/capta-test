@@ -1,5 +1,6 @@
 // /src/infrastructure/repositories/holiday-api.repository.ts
 import axios from 'axios';
+import { DateTime } from 'luxon'; 
 import { IHoliday } from '../../domain/holiday.entity';
 import { IHolidayRepository } from '../../shared/interfaces/holiday.repository.interface';
 import { config } from '../../shared/config';
@@ -21,10 +22,26 @@ export class ApiHolidayRepository implements IHolidayRepository {
       );
       // The response data is validated and mapped to our internal IHoliday domain entity.
       // This mapping protects our domain from changes in the external API's data structure.
-      return response.data.map((h) => ({
-        date: new Date(h.date),
-        name: h.name,
-      }));
+      return response.data
+        .map((h) => {
+          const holidayDate = DateTime.fromISO(h.date, {
+            zone: 'America/Bogota',
+          })
+            .startOf('day')
+            .toJSDate();
+
+          
+          if (isNaN(holidayDate.getTime())) {
+            console.warn(`Invalid date format received from API: ${h.date}`);
+            return null;
+          }
+
+          return {
+            date: holidayDate,
+            name: h.name,
+          };
+        })
+        .filter((h): h is IHoliday => h !== null);
     } catch (error) {
       console.error('Failed to fetch holidays from API:', error);
       // In a real-world scenario, you might have more sophisticated error handling,
@@ -40,3 +57,4 @@ export class ApiHolidayRepository implements IHolidayRepository {
     return Promise.resolve();
   }
 }
+

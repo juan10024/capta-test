@@ -1,4 +1,4 @@
-// /src/interfaces/validators/calendar.validator.ts
+//src/interfaces/validators/calendar.validator.ts
 import { query, ValidationChain } from 'express-validator';
 
 /**
@@ -9,7 +9,8 @@ import { query, ValidationChain } from 'express-validator';
 export const validateCalculateDate: ValidationChain[] = [
   // Rule: At least one of 'days' or 'hours' must be present.
   query().custom((value, { req }) => {
-    if (!req.query.days && !req.query.hours) {
+    // This custom validator checks the entire query object.
+    if (!req.query?.days && !req.query?.hours) {
       throw new Error("At least one of 'days' or 'hours' must be provided.");
     }
     return true;
@@ -32,7 +33,8 @@ export const validateCalculateDate: ValidationChain[] = [
     .optional()
     .isISO8601()
     .withMessage('The "date" parameter must be a valid ISO 8601 string.')
-    .bail() // Stop validation if not ISO, to prevent error on next check
+    .bail()
     .matches(/Z$/)
     .withMessage('The "date" parameter must be in UTC and end with "Z".'),
 ];
+
