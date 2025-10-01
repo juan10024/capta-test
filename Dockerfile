@@ -24,4 +24,4 @@ RUN addgroup -S nodejs && adduser -S nodeuser -G nodejs
 USER nodeuser
 
 EXPOSE 4000
-CMD ["node", "dist/main.js"]
+CMD ["ls", "-lR", "/usr/src/app"]
