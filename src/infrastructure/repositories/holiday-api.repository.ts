@@ -1,6 +1,6 @@
 // /src/infrastructure/repositories/holiday-api.repository.ts
 import axios from 'axios';
-import { DateTime } from 'luxon'; 
+import { DateTime } from 'luxon';
 import { IHoliday } from '../../domain/holiday.entity';
 import { IHolidayRepository } from '../../shared/interfaces/holiday.repository.interface';
 import { config } from '../../shared/config';
@@ -13,48 +13,52 @@ import { config } from '../../shared/config';
 export class ApiHolidayRepository implements IHolidayRepository {
   /**
    * Fetches all holidays from the configured external API URL.
+   * It is designed to handle an array of date strings, as per the actual API response.
    * @returns {Promise<IHoliday[]>} A promise that resolves to an array of holidays.
    */
   async findAll(): Promise<IHoliday[]> {
     try {
-      const response = await axios.get<{ date: string; name: string }[]>(
-        config.holidayApiUrl,
-      );
-      // The response data is validated and mapped to our internal IHoliday domain entity.
-      // This mapping protects our domain from changes in the external API's data structure.
+      // The external API returns a simple array of strings, e.g., ["2025-01-01", ...].
+      const response = await axios.get<string[]>(config.holidayApiUrl);
+
+      // We must map this array of strings to our internal IHoliday domain entity structure.
       return response.data
-        .map((h) => {
-          const holidayDate = DateTime.fromISO(h.date, {
+        .map((dateString) => {
+          // Use Luxon to safely parse the date string.
+          const holidayDate = DateTime.fromISO(dateString, {
             zone: 'America/Bogota',
           })
             .startOf('day')
             .toJSDate();
 
-          
+          // Validate that the date is valid before returning it.
           if (isNaN(holidayDate.getTime())) {
-            console.warn(`Invalid date format received from API: ${h.date}`);
+            console.warn(
+              `Invalid date format received from API: ${dateString}`,
+            );
             return null;
           }
 
+          // The external API does not provide a name, so we provide a default one.
+          // The date is the critical piece of information for our domain logic.
           return {
             date: holidayDate,
-            name: h.name,
+            name: 'Holiday',
           };
         })
-        .filter((h): h is IHoliday => h !== null);
+        .filter((h): h is IHoliday => h !== null); // Filter out any null/invalid dates.
     } catch (error) {
       console.error('Failed to fetch holidays from API:', error);
-      // In a real-world scenario, you might have more sophisticated error handling,
-      // like retries or falling back to a different data source.
       return [];
     }
   }
 
-  // The save method is not applicable for this read-only API source,
-  // but it must be implemented to satisfy the interface contract.
+  /**
+   * The save method is not applicable for this read-only API source,
+   * but it must be implemented to satisfy the interface contract.
+   */
   async save(holidays: IHoliday[]): Promise<void> {
     console.warn('ApiHolidayRepository does not support saving.');
     return Promise.resolve();
   }
 }
-

@@ -27,8 +27,11 @@ export class CalendarService {
       holidays.map((h) => h.date.toISOString().split('T')[0]),
     );
 
+    // Detect if input date includes milliseconds (".000Z" or ".123Z")
+    const hasMilliseconds = isoDate != null && /\.\d{3}Z$/.test(isoDate);
+
     // Create the initial WorkingDate object, which handles timezone conversion.
-    let workingDate = WorkingDate.fromISOUtc(isoDate);
+    let workingDate = WorkingDate.fromISOUtc(isoDate, hasMilliseconds);
 
     // Snap the start date to a valid working time as per business rules.
     workingDate = workingDate.snapToWorkingTime(holidaySet);
