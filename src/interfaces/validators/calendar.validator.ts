@@ -1,4 +1,3 @@
-//src/interfaces/validators/calendar.validator.ts
 import { query, ValidationChain } from 'express-validator';
 
 /**

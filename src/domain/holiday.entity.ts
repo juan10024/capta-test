@@ -1,4 +1,3 @@
-// /src/domain/holiday.entity.ts
 /**
  * @interface IHoliday
  * Represents the structure of a holiday entity.

@@ -1,4 +1,3 @@
-// /src/shared/interfaces/holiday.repository.interface.ts
 import { IHoliday } from '../../domain/holiday.entity';
 
 /**

@@ -1,4 +1,3 @@
-// /src/infrastructure/database/mongo.ts
 import mongoose from 'mongoose';
 
 /**

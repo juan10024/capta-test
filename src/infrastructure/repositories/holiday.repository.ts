@@ -1,4 +1,3 @@
-// /src/infrastructure/repositories/holiday.repository.ts
 import mongoose, { Schema, Document } from 'mongoose';
 import { IHoliday } from '../../domain/holiday.entity';
 import { IHolidayRepository } from '../../shared/interfaces/holiday.repository.interface';

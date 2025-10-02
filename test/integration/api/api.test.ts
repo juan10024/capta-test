@@ -1,4 +1,3 @@
-// /tests/integration/api/api.test.ts
 import axios from 'axios';
 
 /**
@@ -18,7 +17,9 @@ interface ApiTestCase {
   expected?: string;
 }
 
-const API_BASE_URL = 'http://localhost:4000/api/v1/calculate-date';
+//const API_BASE_URL = 'http://localhost:4000/api/v1/calculate-date';
+const API_BASE_URL = 'https://capta-backend.onrender.com/api/v1/calculate-date';
+
 
 // This array contains all examples from the PDF, typed according to the interface.
 // test the millisecond logic.

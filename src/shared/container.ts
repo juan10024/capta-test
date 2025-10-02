@@ -1,4 +1,3 @@
-// /src/shared/container.ts
 import { CalendarService } from '../application/calendar.service';
 import { ApiHolidayRepository } from '../infrastructure/repositories/holiday-api.repository';
 import { MongoHolidayRepository } from '../infrastructure/repositories/holiday.repository';

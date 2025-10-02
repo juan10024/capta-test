@@ -1,4 +1,3 @@
-// /src/application/calendar.service.ts
 import { WorkingDate } from '../domain/working-date.value-object';
 import { IHolidayRepository } from '../shared/interfaces/holiday.repository.interface';
 import { CalculateDateDto } from '../interfaces/DTOs/calendar.dto';

@@ -1,4 +1,3 @@
-// /src/interfaces/routes/calendar.routes.ts
 import { Router } from 'express';
 import { calendarController } from '../../shared/container';
 import { validateCalculateDate } from '../validators/calendar.validator';

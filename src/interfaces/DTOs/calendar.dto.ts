@@ -1,4 +1,3 @@
-// /src/interfaces/DTOs/calendar.dto.ts
 /**
  * @interface CalculateDateDto
  * Data Transfer Object for the calculate date request.

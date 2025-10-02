@@ -1,4 +1,3 @@
-// /src/interfaces/controllers/calendar.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { CalendarService } from '../../application/calendar.service';
